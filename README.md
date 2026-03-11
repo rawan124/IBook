@@ -58,7 +58,7 @@ The password recovery system works as follows:
 1. The user requests a password reset.
 2. The backend generates a password reset token using ASP.NET Identity.
 3. A reset link containing the token is sent via SMTP email.
-4. The user can reset their password through the provided link.
+4. The user can reset their password through the provided reset token.
 
 ---
 
