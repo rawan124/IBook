@@ -11,6 +11,8 @@ import { useAccount } from '../lib/hooks/useAccount';
 
 import type { RegisterDto } from '../types/RegisterDto';
 import type { RegisterFormValues } from '../types/RegisterFormValues';
+import { useNavigate } from 'react-router';
+
 
 
 
@@ -39,11 +41,9 @@ const tailFormItemLayout: FormItemProps = {
 };
 
 const Registration: React.FC = () => {
+  const navigate = useNavigate();
   const [form] = Form.useForm();
 
-  // const onFinish = (values: unknown) => {
-  //   console.log('Received values of form: ', values);
-  // };
   const { registerUser } = useAccount();
   const onSubmit = async (data: RegisterFormValues) => {
     const dto: RegisterDto = {
@@ -51,8 +51,34 @@ const Registration: React.FC = () => {
     email: data.email,
     password: data.password,
   };
+    try {
     await registerUser.mutateAsync(dto);
-  };
+    navigate('/login');
+  }  catch (error) {
+  const err = error as { response?: { data?: string[] } };
+  const errors = err.response?.data;
+
+  if (Array.isArray(errors)) {
+    const fields = errors.map((message) => {
+      if (message.toLowerCase().includes("username")) {
+        return { name: "username", errors: [message] };
+      }
+
+      if (message.toLowerCase().includes("email")) {
+        return { name: "email", errors: [message] };
+      }
+
+      if (message.toLowerCase().includes("password")) {
+        return { name: "password", errors: [message] };
+      }
+
+      return { name: "username", errors: [message] };
+    });
+
+    form.setFields(fields);
+  }
+}
+};
 
   
 
@@ -65,6 +91,7 @@ const Registration: React.FC = () => {
       form={form}
       name="register"
       onFinish={onSubmit}
+      
       style={{maxWidth: 600, margin: '0 auto'}}
       scrollToFirstError
     >
@@ -83,6 +110,7 @@ const Registration: React.FC = () => {
       <Form.Item
         name="email"
         label="E-mail"
+        
         rules={[
           {
             type: 'email',
@@ -134,53 +162,10 @@ const Registration: React.FC = () => {
         <Input.Password />
       </Form.Item>
 
-      <Form.Item
-        name="nickname"
-        label="Nickname"
-        tooltip="What do you want others to call you?"
-        rules={[{ required: false, message: 'Please input your nickname!', whitespace: true }]}
-      >
-        <Input />
-      </Form.Item>
-
-      
-
-
-
-      {/* <Form.Item
-        name="gender"
-        label="Gender"
-        rules={[{ required: true, message: 'Please select gender!' }]}
-      >
-        <Select
-          placeholder="select your gender"
-          defaultValue={'female'}
-          options={[
-            { label: 'Male', value: 'male' },
-            { label: 'Female', value: 'female' }
-          ]}
-        />
-      </Form.Item> */}
-
-      {/* <Form.Item label="Captcha" extra="We must make sure that your are a human.">
-        <Row gutter={8}>
-          <Col span={12}>
-            <Form.Item
-              name="captcha"
-              noStyle
-              rules={[{ required: true, message: 'Please input the captcha you got!' }]}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Button>Get captcha</Button>
-          </Col>
-        </Row>
-      </Form.Item> */}
+     
 
       <Form.Item {...tailFormItemLayout}>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" loading={registerUser.isPending}>
           Register
         </Button>
       </Form.Item>

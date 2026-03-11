@@ -125,16 +125,24 @@ public class AuthController(   UserManager<User> userManager,
         };
 
         if (!string.IsNullOrEmpty(existingRefreshToken))
-        {
-            var oldToken = await dbContext.RefreshTokens
-                .FirstOrDefaultAsync(x => x.Token == existingRefreshToken);
+{
+    var oldToken = await dbContext.RefreshTokens
+        .FirstOrDefaultAsync(x => x.Token == existingRefreshToken);
 
-            if (oldToken != null)
-                dbContext.RefreshTokens.Remove(oldToken);
-        }
+    if (oldToken != null)
+        dbContext.RefreshTokens.Remove(oldToken);
+}
 
-        await dbContext.RefreshTokens.AddAsync(refreshToken);
-        await dbContext.SaveChangesAsync();
+await dbContext.RefreshTokens.AddAsync(refreshToken);
+
+try
+{
+    await dbContext.SaveChangesAsync();
+}
+catch (DbUpdateConcurrencyException)
+{
+    // Ignore if token was already removed
+}
 
         return refreshToken.Token;
     }
@@ -149,9 +157,12 @@ public class AuthController(   UserManager<User> userManager,
         {
             new(JwtRegisteredClaimNames.Sub, user.Id),
             new(JwtRegisteredClaimNames.Email, user.Email!),
-            //new(ClaimTypes.Role, role),
-            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            new("username", user.UserName!),
+
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new("role", role)
         };
+        Console.WriteLine("Generating JWT for user: " + user.UserName);
         var roles = await userManager.GetRolesAsync(user);
     claims.AddRange(
         roles.Select(role => new Claim(ClaimTypes.Role, role))

@@ -66,3 +66,22 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 } */
+/* :root {
+background-color: #FFF9F6;
+} */
+
+:root {
+  --surface: #F9FAFB;
+  --border: #E5E7EB;
+  --text-secondary: #6B7280;
+background: linear-gradient(135deg, #FDF6EC, #DCEEFF);
+
+
+
+
+
+
+
+
+}
+/*background-color: #9ad0ec;

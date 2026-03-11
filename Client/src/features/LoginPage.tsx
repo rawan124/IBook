@@ -1,16 +1,25 @@
 
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Flex, Form, Input } from 'antd';
+import { Button, Flex, Form, Input } from 'antd';
 import { useAccount } from '../lib/hooks/useAccount';
 import type { LoginFormValues } from '../types/LoginFormValues';
+import { Link } from 'react-router';
+import { useState } from 'react';
+import CustomAlert from '../app/components/CustomAlert';
 
 export function LoginPage() {
   const { loginUser } = useAccount();
+  const [error,setError]=useState("");
   const onFinish = async(values: LoginFormValues) => {
+    try{
     await loginUser.mutateAsync({
       email: values.username,
       password: values.password
     });
+  }
+  catch{
+    setError("Invalid credentials");
+  }
   };
 
 
@@ -18,7 +27,7 @@ export function LoginPage() {
   return (
     <Form
       name="login"
-      initialValues={{ remember: true }}
+
       style={{ maxWidth: 360, margin: '0 auto', marginTop: '200px' }}
       onFinish={onFinish}
     >
@@ -36,10 +45,11 @@ export function LoginPage() {
       </Form.Item>
       <Form.Item>
         <Flex justify="space-between" align="center">
-          <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>Remember me</Checkbox>
-          </Form.Item>
-          <a href="">Forgot password</a>
+    
+          <Link to="/reset-password">
+          
+            Forgot password?
+            </Link>
         </Flex>
       </Form.Item>
 
@@ -47,8 +57,16 @@ export function LoginPage() {
         <Button block type="primary" htmlType="submit">
           Log in
         </Button>
-        or <a href="">Register now!</a>
+        or <Link to="/registration">Register now!</Link>
       </Form.Item>
+      {error && (
+  <CustomAlert
+    type="error"
+    message="Login Failed"
+    description={error}
+    onClose={()=> setError("")}
+  />
+)}
     </Form>
   );
 };

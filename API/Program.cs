@@ -85,7 +85,7 @@ if (app.Environment.IsDevelopment())
 app.MapControllers();
 //app.MapGroup("/api")
 //.MapIdentityApi<User>();
-
+app.UseStaticFiles();
 
 using (var scope = app.Services.CreateScope())
 {
@@ -101,6 +101,7 @@ using (var scope = app.Services.CreateScope())
 
         await DbInitializer.SeedRoles(roleManager);
         await DbInitializer.SeedUsers(userManager);
+        await DbInitializer.SeedAuthorsAndBooks(context);
     }
     catch (Exception ex)
     {

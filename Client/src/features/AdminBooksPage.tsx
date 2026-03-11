@@ -1,29 +1,4 @@
-// import { BookSection } from "./BookSection";
-// import mockBooks from "./mockBooks";
 
-// export function BooksPage() {
-//   return (
-//     <div
-//       style={{
-//         backgroundColor: "#F5EFE7",
-//         minHeight: "100vh",
-//         padding: "24px 16px"
-//       }}
-//     >
-//       <div
-//         style={{
-//           maxWidth: 1200,
-//           margin: "0 auto"
-//         }}
-//       >
-//         <BookSection title="Featured Books" books={mockBooks} />
-//       </div>
-//     </div>
-//   );
-// }
-
-
-// pages/AdminBooksPage.tsx
 import {
   Table,
   Tabs,
@@ -32,13 +7,14 @@ import {
   Space,
   Card,
   Typography,
+  Modal,
 } from 'antd';
 import { useState } from 'react';
 import type { ColumnsType } from 'antd/es/table';
 
 import { useAdminBooks } from '../lib/hooks/useAdminBooks';
 import { useBookActions } from '../lib/hooks/useBookActions';
-//import type { Books, BookTableItem } from '../types/Books';
+
 import { getBookStatus } from '../types/getStatus';
 import type { BookTableItem } from '../types/Books';
 
@@ -49,12 +25,12 @@ const { Title, Text } = Typography;
 const AdminBooksPage = () => {
   const [status, setStatus] = useState<string>('All');
 const [editingBook, setEditingBook] = useState<BookTableItem | null>(null);
-
+const [viewingBook, setViewingBook] = useState<BookTableItem | null>(null);
   const { data, isLoading } = useAdminBooks(status);
   const {
     approveBook,
     publishBook,
-    //unpublishBook,
+  
   } = useBookActions();
 
 
@@ -64,14 +40,7 @@ const [editingBook, setEditingBook] = useState<BookTableItem | null>(null);
       title: 'Title',
       dataIndex: 'title',
     },
-    {
-      title: 'Author',
-      dataIndex: 'author',
-    },
-    {
-      title: 'Created By',
-      dataIndex: 'createdByName',
-    },
+    
     {
       title: 'Status',
       render: (_, record) => {
@@ -94,6 +63,9 @@ const [editingBook, setEditingBook] = useState<BookTableItem | null>(null);
 
         return (
           <Space>
+             <Button onClick={() => setViewingBook(record)}>
+        View
+      </Button>
             {status === 'Published' }
             <Button type="link"
               onClick={() => 
@@ -124,17 +96,7 @@ const [editingBook, setEditingBook] = useState<BookTableItem | null>(null);
               </Button>
             )}
 
-            {status === 'Published' && (
-              <Button
-                type="link"
-                danger
-                // onClick={() =>
-                //   unpublishBook.mutate(record.id)
-                // }
-              >
-                Unpublish
-              </Button>
-            )}
+         
           </Space>
         );
       },
@@ -176,7 +138,37 @@ const [editingBook, setEditingBook] = useState<BookTableItem | null>(null);
 />
 
       </Card>
+      <Modal
+  open={!!viewingBook}
+  onCancel={() => setViewingBook(null)}
+  footer={null}
+  width={700}
+  title={viewingBook?.title}
+>
+  {viewingBook && (
+    <>
+
+<p>
+  <strong>Authors:</strong>{" "}
+  {viewingBook.authors.map(a => a.fullName).join(", ")}
+</p>
+      <p><strong>Description:</strong></p>
+      <p>{viewingBook.description}</p>
+      <p><strong>Summary</strong></p>
+      <p>{viewingBook.summary}</p>
+      
+      {viewingBook.imageUrl && (
+        <img
+          src={`http://localhost:5294${viewingBook.imageUrl}`}
+          width={200}
+          style={{ marginTop: 16 }}
+        />
+      )}
+    </>
+  )}
+</Modal>
     </div>
+    
   );
 };
 

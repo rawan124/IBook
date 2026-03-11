@@ -56,6 +56,7 @@ const ChangePassword: React.FC = () => {
 
 
   return (
+    <div style={{ margin: '180px auto' }}>
     <Form
       labelAlign="left"
       labelWrap
@@ -136,6 +137,7 @@ const ChangePassword: React.FC = () => {
         </Button>
       </Form.Item>
     </Form>
+    </div>
   );
 };
 

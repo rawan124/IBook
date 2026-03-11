@@ -3,12 +3,12 @@ namespace Domain;
 public class Book
 { 
     public int Id { get; set; }
-    public required string Name { get; set; }
+    public  string? Name { get; set; }
     public required string Title { get; set; }
-    public required string Author { get; set; }
+   // public required string Author { get; set; }
     public required string Description { get; set; }
 
-    public required string Image { get; set; }
+    public required string ImageUrl { get; set; }
     public required string Summary { get; set; }
 
     public bool IsApproved { get; set; } = false;
@@ -16,7 +16,11 @@ public class Book
 
     public ICollection<FavoriteBook> FavoritedByUsers { get; set; } = [];
 
+    public ICollection<Review> Reviews { get; set; } = [];
+
     public string CreatedByUserId { get; set; } = null!;
     public User CreatedByUser { get; set; } = null!;
+    public ICollection<Author> Authors { get; set; } = [];
 
+    public ICollection<WishlistItem> WishlistedByUsers { get; set; } = [];
 }

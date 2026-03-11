@@ -6,7 +6,7 @@ const RegisterPage = () => {
   return (
  
     <Row
-      //justify='space-around'
+      
       align="middle"
       gutter={48}
       style={{ marginTop: '120px' }}

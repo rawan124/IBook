@@ -1,16 +1,17 @@
 import { Typography, Card } from "antd";
 import BookForm from "../app/components/BookForm";
 import { useBookActions } from "../lib/hooks/useBookActions";
+import { useAuth } from "../lib/hooks/useAuth";
+import type { CreateBook } from "../types/CreateBook";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 const CreateBookPage = () => {
  
   const { createBook } = useBookActions();
+  const {user}=useAuth();
 
-  // const onFinish = (values: CreateBook) => {
-  //   createBook.mutate(values);
-  // };
+
 
   return (
     <div
@@ -18,25 +19,27 @@ const CreateBookPage = () => {
         display: 'flex',
         justifyContent: 'center',
         padding: '48px 16px',
-        //background: '#f5f7fa',
-        background: '#ffb8c4',
         minHeight: '100vh',
       }}
     >
       <Card
         style={{ width: 820 , padding: 32}}
+        variant="borderless"
         
         
       >
         <Title level={3}> 
-          Create New Book
+          {user?.role === "SuperAdmin" ? "Create New Book As Admin" : "Create New Book as User"}
+          
         </Title>
-        <Text type="secondary">
-          This book will be created as an admin entry
-        </Text>
          <BookForm
+         
 
-               onSubmit={(values) => createBook.mutate(values)}
+               onSubmit={
+                
+                (values) => {
+                   createBook.mutate(values as CreateBook); 
+                  }}
         submitText="Create Book"
         loading={createBook.isPending}
           />

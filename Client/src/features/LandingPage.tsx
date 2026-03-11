@@ -1,58 +1,45 @@
+import { Button, Typography, Row, Col } from 'antd';
 
-import { Button, Typography, Space } from 'antd';
-import CarouselComponent from './CarouselComponent';
+ import { useNavigate } from 'react-router';
 
 const { Title, Paragraph } = Typography;
-const imageStyle: React.CSSProperties = {
-  width: '100%',
-  height: '260px',
-  objectFit: 'contain', 
-  borderRadius: '12px',
-};
+
 
 export default function LandingPage() {
-  return (
-    <div
-      style={{
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        paddingTop: '48px',
-        gap: '32px',
-        backgroundColor: '#d195c2',
-      }}
-    >
-      
-      <div style={{ width: '100%', maxWidth: '900px' }}>
-        <CarouselComponent>
-          <div>
-            <img src="./images/book1.jpg" alt="Book 1" style={imageStyle} />
-          </div>
-          <div>
-            <img src="./images/book2.jpg" alt="Book 2" style={imageStyle} />
-          </div>
-          <div>
-            <img src="./images/book3.jpg" alt="Book 3" style={imageStyle} />
-          </div>
-        </CarouselComponent>
-      </div>
+    const navigate= useNavigate();
 
-      
-      <Title level={1}>Welcome to BOOK</Title>
-      <Paragraph>
-        Discover and explore top books curated for you.
-      </Paragraph>
 
-      
-      <Space size="large">
-        <Button type="primary" size="large">
-          Get Started
-        </Button>
-        <Button size="large">
-          Already have an account
-        </Button>
-      </Space>
+
+ return (
+    <div style={{ maxWidth: 1100, margin: "0 auto", padding: "80px 24px" }}>
+      <Row align="middle" gutter={[48, 48]}>
+        <Col xs={24} md={12}>
+          <Title style={{ fontSize: 48, lineHeight: 1.2, color: "#1F2937", fontFamily: "Playfair Display" }}>
+            Discover stories that feel like home.
+          </Title>
+
+          <Paragraph style={{ fontSize: 20 , fontFamily:"Inter"}}>
+            A curated space for readers who love beauty, depth, and elegance.
+          </Paragraph>
+
+          <div style={{ marginTop: 24 }}>
+            <Button type="primary" size="large" onClick={()=> navigate('/books')}
+            style={{boxShadow: "0 8px 20px rgba(37, 99, 235, 0.25)", fontFamily:"Inter"}} >
+              Explore Books
+            </Button>
+
+            <Button
+            type="primary"
+              size="large"
+
+              style={{ marginLeft: 16, boxShadow: "0 8px 20px rgba(37, 99, 235, 0.25)", fontFamily:"Inter" }}
+              //onClick={() => navigate('/about')}
+            >
+              Join iBook
+            </Button>
+          </div>
+        </Col>
+      </Row>
     </div>
   );
 }
