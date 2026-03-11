@@ -12,7 +12,7 @@ IBook is a full-stack web application that allows users to explore books, manage
 - Browse books and view details
 - Add books to Wishlist
 - Mark books as Read
-- Upload book cover images
+
 - Responsive user interface
 - Add Reviews
 - Add authors
@@ -49,9 +49,6 @@ After a successful login:
 - The backend generates a JWT token
 - The token contains user claims such as user ID and email
 - The frontend stores the token and sends it with protected API requests
-
----
-
 
 
 
