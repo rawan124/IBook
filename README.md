@@ -72,4 +72,12 @@ The application supports uploading images such as book covers.
 
 ---
 
+## How to Run the Project
+
+To run the project locally, first clone the repository and navigate to the project folder. 
+Start the backend by going to the `backend` directory and running `dotnet restore` followed by `dotnet run`. 
+Then start the frontend by navigating to the `frontend` directory, running `npm install`, and then `npm run dev`.
+The project uses **SQL Server with Entity Framework Core (Code-First)**, so you may need to run `dotnet ef database update` to create the database and apply migrations.
+
+
 
